@@ -182,7 +182,7 @@ class BankService {
 
   private async getBankApiUrl(): Promise<string> {
     const corebankUrl = await getSetting("corebank_api_url");
-    return (corebankUrl || "http://localhost:8080").replace(/\/$/, "") + "/api";
+    return (corebankUrl || "http://localhost:80").replace(/\/$/, "") + "/api";
   }
 
   private async getAuthHeaders(): Promise<Record<string, string>> {

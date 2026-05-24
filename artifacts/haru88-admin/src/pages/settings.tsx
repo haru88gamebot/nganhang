@@ -38,11 +38,13 @@ const SECTIONS: Section[] = [
     ]
   },
   {
-    title: "Ngân hàng - Đăng nhập tự động (API ngân hàng)",
+    title: "Ngân hàng - Kết nối HARU88 Panel API",
     fields: [
-      { key: "bank_username", label: "Tên đăng nhập ngân hàng (username/số điện thoại)" },
-      { key: "bank_password", label: "Mật khẩu ngân hàng", type: "password" },
-      { key: "corebank_api_url", label: "CoreBank API URL (để trống = dùng mặc định localhost:2002)" },
+      { key: "bank_username", label: "Tên đăng nhập MB Bank (số điện thoại / username)" },
+      { key: "bank_password", label: "Mật khẩu MB Bank", type: "password" },
+      { key: "corebank_api_url", label: "HARU88 Panel URL (để trống = mặc định http://localhost:80)" },
+      { key: "corebank_client_id", label: "X-Client-ID — lấy từ HARU88 Panel → Cài đặt" },
+      { key: "corebank_api_key", label: "X-API-Key — lấy từ HARU88 Panel → Cài đặt", type: "password" },
     ]
   },
   {
@@ -118,7 +120,7 @@ type SectionStatus = { type: "success"; msg: string } | { type: "error"; msg: st
 
 function WebhookUrlCard() {
   const [copied, setCopied] = useState(false);
-  const webhookUrl = `${window.location.origin}/api/bank/webhook`;
+  const webhookUrl = `${window.location.origin}/bot-api/bank/webhook`;
 
   const copy = () => {
     navigator.clipboard.writeText(webhookUrl).then(() => {

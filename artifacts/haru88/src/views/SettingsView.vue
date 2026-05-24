@@ -77,22 +77,63 @@
 
       <el-divider />
       <div class="cred-usage">
-        <p class="usage-title">Cách sử dụng trong bot:</p>
-        <pre class="usage-code">// Gọi API lấy giao dịch
-const res = await fetch('/api/transactions', {
-  method: 'POST',
-  headers: {
-    'Content-Type': 'application/json',
-    'X-Client-ID': '{{ creds.clientId || "your-client-id" }}',
-    'X-API-Key': '{{ creds.apiKey ? "••• (copy từ ô trên)" : "your-api-key" }}'
-  },
-  body: JSON.stringify({ accountNumber, fromDate, toDate })
+        <p class="usage-title">Hướng dẫn kết nối Bot Admin với HARU88 Panel:</p>
+        <div class="setup-steps">
+          <div class="setup-step">
+            <span class="step-num">1</span>
+            <div class="step-body">
+              <div class="step-title">Vào Bot Admin → Cài đặt → "Ngân hàng - Kết nối HARU88 Panel API"</div>
+              <div class="step-desc">Điền 3 giá trị sau vào bot admin panel:</div>
+              <div class="step-fields">
+                <div class="field-row"><span class="field-key">HARU88 Panel URL</span><span class="field-val">{{ panelOrigin }}</span></div>
+                <div class="field-row"><span class="field-key">X-Client-ID</span><span class="field-val font-mono">{{ creds.clientId || "chưa tải..." }}</span></div>
+                <div class="field-row"><span class="field-key">X-API-Key</span><span class="field-val font-mono">{{ creds.apiKey ? "••••" + creds.apiKey.slice(-6) : "chưa tải..." }}</span></div>
+              </div>
+            </div>
+          </div>
+          <div class="setup-step">
+            <span class="step-num">2</span>
+            <div class="step-body">
+              <div class="step-title">Copy Webhook URL từ Bot Admin → dán vào "Custom Webhook URL" bên dưới</div>
+              <div class="step-desc">Webhook URL của bot có dạng: <code class="inline-code">https://your-domain.com/bot-api/bank/webhook</code></div>
+            </div>
+          </div>
+          <div class="setup-step">
+            <span class="step-num">3</span>
+            <div class="step-body">
+              <div class="step-title">Nhấn "Xác nhận URL" để test kết nối</div>
+              <div class="step-desc">HARU88 Panel sẽ gửi một giao dịch test đến bot — nếu bot trả về 200 là thành công.</div>
+            </div>
+          </div>
+        </div>
+        <p class="usage-title" style="margin-top: 16px;">Gọi API từ code (Node.js):</p>
+        <pre class="usage-code">const HARU88_URL = '{{ panelOrigin }}'; // URL của HARU88 Panel
+const headers = {
+  'Content-Type': 'application/json',
+  'X-Client-ID': '{{ creds.clientId || "your-client-id" }}',
+  'X-API-Key':   '{{ creds.apiKey ? "••• (copy từ ô trên)" : "your-api-key" }}'
+};
+
+// 1. Đăng nhập vào MB Bank (tất cả các endpoint đều cần auth headers)
+await fetch(`${HARU88_URL}/api/login`, {
+  method: 'POST', headers,
+  body: JSON.stringify({ username: 'so_dt_mb', password: 'mat_khau' })
 });
 
-// Xác minh checksum webhook nhận được
+// 2. Lấy số dư tài khoản
+const bal = await fetch(`${HARU88_URL}/api/balance`, { method: 'POST', headers });
+const { data } = await bal.json(); // data.accounts[], data.totalBalance
+
+// 3. Lịch sử giao dịch
+const tx = await fetch(`${HARU88_URL}/api/transactions`, {
+  method: 'POST', headers,
+  body: JSON.stringify({ accountNumber, fromDate, toDate }) // DD/MM/YYYY
+});
+
+// 4. Xác minh checksum webhook
 import { createHmac } from 'crypto';
 const sig = createHmac('sha256', checksumKey).update(rawBody).digest('hex');
-const valid = request.headers['x-checksum'] === 'sha256=' + sig;</pre>
+const valid = 'sha256=' + sig === request.headers['x-checksum'];</pre>
       </div>
     </el-card>
 
@@ -226,6 +267,7 @@ interface ApiCredentials {
 }
 
 const { t } = useI18n();
+const panelOrigin = window.location.origin;
 const saving = ref(false);
 const testing = ref(false);
 const regenLoading = ref<string | null>(null);
@@ -426,6 +468,20 @@ onMounted(() => {
 
 .cred-usage { margin-top: 8px; }
 .usage-title { font-size: 13px; color: var(--text-secondary); font-weight: 600; margin: 0 0 8px; }
+
+.setup-steps { display: flex; flex-direction: column; gap: 12px; margin-bottom: 4px; }
+.setup-step { display: flex; gap: 14px; align-items: flex-start; padding: 12px 14px; background: rgba(64,158,255,0.05); border: 1px solid rgba(64,158,255,0.15); border-radius: 8px; }
+.step-num { width: 24px; height: 24px; border-radius: 50%; background: var(--el-color-primary); color: #fff; font-size: 12px; font-weight: 700; display: flex; align-items: center; justify-content: center; flex-shrink: 0; margin-top: 1px; }
+.step-body { flex: 1; min-width: 0; }
+.step-title { font-size: 13px; font-weight: 600; color: var(--text-primary); margin-bottom: 4px; }
+.step-desc { font-size: 12px; color: var(--text-muted); }
+.step-fields { margin-top: 8px; display: flex; flex-direction: column; gap: 4px; }
+.field-row { display: flex; align-items: center; gap: 10px; padding: 5px 10px; background: rgba(0,0,0,0.2); border-radius: 6px; }
+.field-key { font-size: 11px; font-weight: 600; color: var(--text-secondary); text-transform: uppercase; letter-spacing: 0.5px; min-width: 120px; flex-shrink: 0; }
+.field-val { font-size: 12px; color: #a8c7fa; word-break: break-all; }
+.field-val.font-mono { font-family: 'Courier New', monospace; }
+.inline-code { font-family: 'Courier New', monospace; font-size: 11px; background: rgba(0,0,0,0.3); padding: 1px 5px; border-radius: 4px; color: #a8c7fa; }
+
 .usage-code {
   background: rgba(0, 0, 0, 0.3);
   border: 1px solid var(--border-color);

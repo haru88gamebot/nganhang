@@ -462,21 +462,25 @@ const CLIENT_ID = creds.clientId || "haru88-xxxxxxxxxxxxxxxx";
 const API_KEY = "YOUR_API_KEY";
 const CHECKSUM_KEY = "YOUR_CHECKSUM_KEY";
 
-const quickStartCode = `# 1. Đăng nhập (captcha tự động OCR — không cần headers xác thực)
+const quickStartCode = `# Tất cả endpoint đều cần X-Client-ID + X-API-Key (lấy từ trang Cài đặt)
+
+# 1. Đăng nhập vào MB Bank (captcha tự động OCR)
 curl -X POST ${BASE_URL}/login \\
   -H "Content-Type: application/json" \\
+  -H "X-Client-ID: ${CLIENT_ID}" \\
+  -H "X-API-Key: YOUR_API_KEY" \\
   -d '{"username": "0912345678", "password": "your_password"}'
 
-# 2. Lấy số dư (cần X-Client-ID + X-API-Key)
+# 2. Lấy số dư
 curl -X POST ${BASE_URL}/balance \\
   -H "Content-Type: application/json" \\
-  -H "X-Client-ID: haru88-xxxxxxxxxxxxxxxx" \\
+  -H "X-Client-ID: ${CLIENT_ID}" \\
   -H "X-API-Key: YOUR_API_KEY"
 
 # 3. Lịch sử giao dịch
 curl -X POST ${BASE_URL}/transactions \\
   -H "Content-Type: application/json" \\
-  -H "X-Client-ID: haru88-xxxxxxxxxxxxxxxx" \\
+  -H "X-Client-ID: ${CLIENT_ID}" \\
   -H "X-API-Key: YOUR_API_KEY" \\
   -d '{"accountNumber": "0912345678", "fromDate": "01/03/2026", "toDate": "27/03/2026"}'`;
 
