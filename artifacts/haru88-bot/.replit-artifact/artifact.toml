@@ -1,0 +1,23 @@
+kind = "web"
+previewPath = "/bot-api/"
+title = "Haru88 Bot Server"
+version = "1.0.0"
+id = "artifacts/haru88-bot"
+router = "path"
+
+[[integratedSkills]]
+name = "react-vite"
+version = "1.0.0"
+
+[[services]]
+name = "web"
+paths = [ "/bot-api/", "/bot-api" ]
+localPort = 22712
+
+[services.development]
+run = "pnpm --filter @workspace/haru88-bot run dev"
+
+[services.env]
+PORT = "22712"
+BASE_PATH = "/bot-api/"
+API_BASE_PATH = "/bot-api"
