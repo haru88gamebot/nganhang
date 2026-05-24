@@ -1,0 +1,25 @@
+{
+  "telegram": {
+    "enabled": false,
+    "botToken": "",
+    "chatId": ""
+  },
+  "discord": {
+    "enabled": false,
+    "webhookUrl": ""
+  },
+  "customWebhook": {
+    "enabled": false,
+    "url": "",
+    "secret": ""
+  },
+  "monitor": {
+    "intervalSeconds": 60,
+    "running": false
+  },
+  "apiCredentials": {
+    "clientId": "haru88-75ccacd486a67f89",
+    "apiKey": "47251db412241c05e1cc408178b701e4cd0d0df13da1e1325faca30c54a5138a",
+    "checksumKey": "4f1e71f6bdaf8b6e00ee3ebb293f37dbe032c24ac86257f50a697964058d7bf6"
+  }
+}

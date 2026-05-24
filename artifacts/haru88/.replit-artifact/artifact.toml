@@ -1,0 +1,31 @@
+kind = "web"
+previewPath = "/"
+title = "HARU88 Panel PRO"
+version = "1.0.0"
+id = "artifacts/haru88"
+router = "path"
+
+[[integratedSkills]]
+name = "react-vite"
+version = "1.0.0"
+
+[[services]]
+name = "web"
+paths = [ "/" ]
+localPort = 20755
+
+[services.development]
+run = "pnpm --filter @workspace/haru88 run dev"
+
+[services.production]
+build = [ "pnpm", "--filter", "@workspace/haru88", "run", "build" ]
+publicDir = "artifacts/haru88/dist/public"
+serve = "static"
+
+[[services.production.rewrites]]
+from = "/*"
+to = "/index.html"
+
+[services.env]
+PORT = "20755"
+BASE_PATH = "/"

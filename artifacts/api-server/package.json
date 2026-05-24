@@ -16,8 +16,11 @@
     "cors": "^2.8.6",
     "drizzle-orm": "catalog:",
     "express": "^5.2.1",
+    "onnxruntime-node": "^1.21.0",
     "pino": "^9.14.0",
-    "pino-http": "^10.5.0"
+    "pino-http": "^10.5.0",
+    "sharp": "^0.34.2",
+    "undici": "^7.11.0"
   },
   "devDependencies": {
     "@types/cookie-parser": "^1.4.10",

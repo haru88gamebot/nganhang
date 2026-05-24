@@ -1,0 +1,32 @@
+{
+  "name": "@workspace/haru88",
+  "version": "0.0.0",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "dev": "vite --config vite.config.ts --host 0.0.0.0",
+    "build": "vite build --config vite.config.ts",
+    "serve": "vite preview --config vite.config.ts --host 0.0.0.0",
+    "typecheck": "vue-tsc -p tsconfig.json --noEmit"
+  },
+  "dependencies": {
+    "@element-plus/icons-vue": "^2.3.2",
+    "axios": "^1.7.0",
+    "echarts": "^5.6.0",
+    "element-plus": "^2.13.6",
+    "qrcode.vue": "^3.8.0",
+    "vue": "^3.5.30",
+    "vue-echarts": "^7.0.3",
+    "vue-i18n": "^9.14.5",
+    "vue-router": "^4.6.4"
+  },
+  "devDependencies": {
+    "@replit/vite-plugin-dev-banner": "catalog:",
+    "@replit/vite-plugin-runtime-error-modal": "catalog:",
+    "@types/node": "catalog:",
+    "@vitejs/plugin-vue": "^6.0.0",
+    "typescript": "~5.9.3",
+    "vite": "catalog:",
+    "vue-tsc": "^2.2.8"
+  }
+}
