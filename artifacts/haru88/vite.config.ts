@@ -49,6 +49,22 @@ export default defineConfig({
     outDir: path.resolve(import.meta.dirname, "dist/public"),
     emptyOutDir: true,
   },
+  optimizeDeps: {
+    include: [
+      "vue",
+      "element-plus",
+      "@element-plus/icons-vue",
+      "vue-i18n",
+      "vue-router",
+      "axios",
+      "echarts/core",
+      "echarts/renderers",
+      "echarts/charts",
+      "echarts/components",
+      "vue-echarts",
+    ],
+    exclude: ["node-telegram-bot-api", "express"],
+  },
   server: {
     port,
     strictPort: true,
